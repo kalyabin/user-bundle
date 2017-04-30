@@ -8,6 +8,13 @@
 https://github.com/kalyabin/symfony-test-helper
 https://github.com/kalyabin/http-helper-bundle
 
+Конфигурация в config.yml:
+```yml
+framework:
+    form:
+        csrf_protection: false
+```
+
 Конфигурация в routing.yml:
 
 ```yml
