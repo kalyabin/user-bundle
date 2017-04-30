@@ -58,8 +58,8 @@ class ChangeEmailTypeTest extends FormWebTestCase
             ],
             [
                 'data' => [
-                    // e-mail другого пользователя (тестируемый - testing@orthoapp.ru)
-                    'newEmail' => 'inactive@orthoapp.ru',
+                    // e-mail другого пользователя (тестируемый - testing@test.ru)
+                    'newEmail' => 'inactive@test.ru',
                 ],
                 'errorKeys' => ['newEmail'],
             ]
@@ -71,12 +71,12 @@ class ChangeEmailTypeTest extends FormWebTestCase
         return [
             [
                 'data' => [
-                    'newEmail' => 'newemail@orthoapp.ru',
+                    'newEmail' => 'newemail@test.ru',
                 ],
             ],
             [
                 'data' => [
-                    'newEmail' => 'testing@orthoapp.ru',
+                    'newEmail' => 'testing@test.ru',
                 ]
             ]
         ];

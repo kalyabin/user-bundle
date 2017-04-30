@@ -42,7 +42,7 @@ class UserTestFixture extends AbstractFixture implements ContainerAwareInterface
         $activeUser
             ->setStatus(UserEntity::STATUS_ACTIVE)
             ->setName('Testing user')
-            ->setEmail('testing@orthoapp.ru')
+            ->setEmail('testing@test.ru')
             ->setPassword('testpassword')
             ->generateSalt();
 
@@ -54,7 +54,7 @@ class UserTestFixture extends AbstractFixture implements ContainerAwareInterface
         $inactiveUser
             ->setStatus(UserEntity::STATUS_NEED_ACTIVATION)
             ->setName('Need activation user')
-            ->setEmail('inactive@orthoapp.ru')
+            ->setEmail('inactive@test.ru')
             ->setPassword('testpassword')
             ->generateSalt();
 
@@ -76,7 +76,7 @@ class UserTestFixture extends AbstractFixture implements ContainerAwareInterface
         $lockedUser
             ->setStatus(UserEntity::STATUS_LOCKED)
             ->setName('Locked user')
-            ->setEmail('locked@orthoapp.ru')
+            ->setEmail('locked@test.ru')
             ->setPassword('testpassword')
             ->generateSalt();
 

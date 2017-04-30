@@ -50,7 +50,7 @@ class UserSystemMailManagerTest extends WebTestCase
             UserTestFixture::class
         ])->getReferenceRepository();
 
-        $this->manager = new UserSystemMailManager($container->get('mailer'), $container->get('templating'), 'testing@orthoapp.ru');
+        $this->manager = new UserSystemMailManager($container->get('mailer'), $container->get('templating'), 'testing@test.ru');
 
         $this->em = $this->getContainer()->get('doctrine.orm.entity_manager');
     }
@@ -94,7 +94,7 @@ class UserSystemMailManagerTest extends WebTestCase
         /** @var UserEntity $user */
         $user = $this->fixtures->getReference('active-user');
 
-        $newEmail = 'newemail@orthoapp.ru';
+        $newEmail = 'newemail@test.ru';
 
         // создать код подтверждения
         $checker = new UserCheckerEntity();
@@ -117,7 +117,7 @@ class UserSystemMailManagerTest extends WebTestCase
         $this->assertInternalType('integer', $result);
         $this->assertGreaterThan(0, $result);
 
-        $this->assertLastMessageEmails($newEmail, 'testing@orthoapp.ru');
+        $this->assertLastMessageEmails($newEmail, 'testing@test.ru');
 
         $url = $this->getUrl('user.change_email_confirmation', [
             'checkerId' => $checker->getId(),
@@ -138,7 +138,7 @@ class UserSystemMailManagerTest extends WebTestCase
         /** @var UserEntity $user */
         $user = $this->fixtures->getReference('active-user');
 
-        $newEmail = 'newemail@orthoapp.ru';
+        $newEmail = 'newemail@test.ru';
 
         // создать код подтверждения
         $checker = new UserCheckerEntity();
@@ -164,7 +164,7 @@ class UserSystemMailManagerTest extends WebTestCase
         $dispatcher->addSubscriber($this->manager);
         $dispatcher->dispatch(UserChangeEmailEvent::NAME, $event);
 
-        $this->assertLastMessageEmails($newEmail, 'testing@orthoapp.ru');
+        $this->assertLastMessageEmails($newEmail, 'testing@test.ru');
 
         $url = $this->getUrl('user.change_email_confirmation', [
             'checkerId' => $checker->getId(),
@@ -202,7 +202,7 @@ class UserSystemMailManagerTest extends WebTestCase
         $this->assertInternalType('integer', $result);
         $this->assertGreaterThan(0, $result);
 
-        $this->assertLastMessageEmails($user->getEmail(), 'testing@orthoapp.ru');
+        $this->assertLastMessageEmails($user->getEmail(), 'testing@test.ru');
 
         $url = $this->getUrl('registration.activate', [
             'checkerId' => $checker->getId(),
@@ -239,7 +239,7 @@ class UserSystemMailManagerTest extends WebTestCase
         $dispatcher->addSubscriber($this->manager);
         $dispatcher->dispatch(UserRegistrationEvent::NAME, new UserRegistrationEvent($user, $checker));
 
-        $this->assertLastMessageEmails($user->getEmail(), 'testing@orthoapp.ru');
+        $this->assertLastMessageEmails($user->getEmail(), 'testing@test.ru');
 
         $url = $this->getUrl('registration.activate', [
             'checkerId' => $checker->getId(),
@@ -276,7 +276,7 @@ class UserSystemMailManagerTest extends WebTestCase
         $this->assertInternalType('integer', $result);
         $this->assertGreaterThan(0, $result);
 
-        $this->assertLastMessageEmails($user->getEmail(), 'testing@orthoapp.ru');
+        $this->assertLastMessageEmails($user->getEmail(), 'testing@test.ru');
 
         $url = $this->getUrl('remember_password.change_password_form', [
             'checkerId' => $checker->getId(),
@@ -313,7 +313,7 @@ class UserSystemMailManagerTest extends WebTestCase
         $dispatcher->addSubscriber($this->manager);
         $dispatcher->dispatch(UserRememberPasswordEvent::NAME, new UserRememberPasswordEvent($user, $checker));
 
-        $this->assertLastMessageEmails($user->getEmail(), 'testing@orthoapp.ru');
+        $this->assertLastMessageEmails($user->getEmail(), 'testing@test.ru');
 
         $url = $this->getUrl('remember_password.change_password_form', [
             'checkerId' => $checker->getId(),
@@ -339,7 +339,7 @@ class UserSystemMailManagerTest extends WebTestCase
         $this->assertInternalType('integer', $result);
         $this->assertGreaterThan(0, $result);
 
-        $this->assertLastMessageEmails($user->getEmail(), 'testing@orthoapp.ru');
+        $this->assertLastMessageEmails($user->getEmail(), 'testing@test.ru');
 
         $this->assertLastMessageContains($newPassword);
     }
@@ -360,7 +360,7 @@ class UserSystemMailManagerTest extends WebTestCase
         $dispatcher->addSubscriber($this->manager);
         $dispatcher->dispatch(UserChangedPasswordEvent::NAME, new UserChangedPasswordEvent($user, $newPassword));
 
-        $this->assertLastMessageEmails($user->getEmail(), 'testing@orthoapp.ru');
+        $this->assertLastMessageEmails($user->getEmail(), 'testing@test.ru');
 
         $this->assertLastMessageContains($newPassword);
     }

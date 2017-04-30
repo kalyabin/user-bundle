@@ -133,7 +133,7 @@ class DashboardControllerTest extends WebTestCase
         // отправляем валидный запрос
         $client->request('POST', $url, [
             'change_email' => [
-                'newEmail' => 'newemail@orthoapp.ru',
+                'newEmail' => 'newemail@test.ru',
             ],
         ]);
         $jsonData = $this->assertIsValidJsonResponse($client->getResponse());
@@ -286,7 +286,7 @@ class DashboardControllerTest extends WebTestCase
         /** @var UserEntity $user */
         $user = $this->loadFixtures([UserTestFixture::class])->getReferenceRepository()->getReference('active-user');
 
-        $newEmail = 'newemail@orthoapp.ru';
+        $newEmail = 'newemail@test.ru';
 
         // создать код подтверждения
         $checker = new UserCheckerEntity();

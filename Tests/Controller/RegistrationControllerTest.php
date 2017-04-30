@@ -166,7 +166,7 @@ class RegistrationControllerTest extends WebTestCase
         $requestData = [
             'registration' => [
                 'name' => 'Test',
-                'email' => 'tester@orthoapp.ru',
+                'email' => 'tester@test.ru',
                 'password' => [
                     'first' => 'testpassword',
                     'second' => 'testpassword',

@@ -52,7 +52,7 @@ class RememberPasswordTypeTest extends FormWebTestCase
         return [
             [
                 'data' => [
-                    'email' => 'testing@orthoapp.ru',
+                    'email' => 'testing@test.ru',
                 ]
             ]
         ];

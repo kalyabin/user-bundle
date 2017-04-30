@@ -110,7 +110,7 @@ class UserSystemMailManager implements EventSubscriberInterface
         $message = \Swift_Message::newInstance()
             ->setSubject('Активация аккаунта')
             ->setBody(
-                $this->templating->render('Emails/registration.html.twig', [
+                $this->templating->render('@user_emails/registration.html.twig', [
                     'user' => $user,
                     'checker' => $checker,
                 ]),
@@ -134,7 +134,7 @@ class UserSystemMailManager implements EventSubscriberInterface
         $message = \Swift_Message::newInstance()
             ->setSubject('Смена e-mail')
             ->setBody(
-                $this->templating->render('Emails/change_email.html.twig', [
+                $this->templating->render('@user_emails/change_email.html.twig', [
                     'user' => $user,
                     'checker' => $checker,
                     'newEmail' => $newEmail,
@@ -158,7 +158,7 @@ class UserSystemMailManager implements EventSubscriberInterface
         $message = \Swift_Message::newInstance()
             ->setSubject('Восстановление пароля')
             ->setBody(
-                $this->templating->render('Emails/remember_password.html.twig', [
+                $this->templating->render('@user_emails/remember_password.html.twig', [
                     'user' => $user,
                     'checker' => $checker,
                 ]),
@@ -181,7 +181,7 @@ class UserSystemMailManager implements EventSubscriberInterface
         $message = \Swift_Message::newInstance()
             ->setSubject('Установлен новый пароль')
             ->setBody(
-                $this->templating->render('Emails/set_new_password.html.twig', [
+                $this->templating->render('@user_emails/set_new_password.html.twig', [
                     'user' => $user,
                     'newPassword' => $newPassword
                 ]),

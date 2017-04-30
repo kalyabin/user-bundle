@@ -1,0 +1,5 @@
+Здравствуйте, {{  user.name }}!<br />
+<br />
+Для завершения регистрации необходимо активировать аккаунт по ссылке:<br />
+<br />
+<a href="{{ absolute_url(path('registration.activate', { 'checkerId' : checker.id, 'code' : checker.code })) }}">{{ absolute_url(path('registration.activate', { 'checkerId' : checker.id, 'code' : checker.code })) }}</a>

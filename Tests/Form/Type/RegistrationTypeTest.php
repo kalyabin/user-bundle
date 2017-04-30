@@ -108,7 +108,7 @@ class RegistrationTypeTest extends FormWebTestCase
             ], [
                 'data' => [
                     'name' => 'Tester',
-                    'email' => 'testing@orthoapp.ru',
+                    'email' => 'testing@test.ru',
                     'password' => [
                         'first' => 'testpassword',
                         'second' => 'testpassword',
@@ -130,7 +130,7 @@ class RegistrationTypeTest extends FormWebTestCase
             [
                 'data' => [
                     'name' => 'Tester',
-                    'email' => 'non-existent@orthoapp.ru',
+                    'email' => 'non-existent@test.ru',
                     'password' => [
                         'first' => 'testpassword',
                         'second' => 'testpassword',

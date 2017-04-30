@@ -140,7 +140,7 @@ class UserManagerTest extends WebTestCase
 
         $this->assertEmpty($user->getCheckerByType(UserCheckerEntity::TYPE_CHANGE_EMAIL));
 
-        $newEmail = 'newemail@orthoapp.ru';
+        $newEmail = 'newemail@test.ru';
 
         // должно создаться событие
         $eventTriggered = false;
@@ -179,7 +179,7 @@ class UserManagerTest extends WebTestCase
 
         $this->assertEmpty($user->getCheckerByType(UserCheckerEntity::TYPE_CHANGE_EMAIL));
 
-        $newEmail = 'newemail@orthoapp.ru';
+        $newEmail = 'newemail@test.ru';
 
         $this->assertNotEquals($newEmail, $user->getEmail());
 

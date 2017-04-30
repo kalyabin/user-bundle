@@ -1,0 +1,7 @@
+Здравствуйте, {{  user.name }}!<br />
+<br />
+От вас поступил запрос на изменение e-mail с "{{ user.email }}" на "{{ newEmail }}". Для изменения email пройдите по ссылке:<br />
+<br />
+<a href="{{ absolute_url(path('user.change_email_confirmation', {'checkerId' : checker.id, 'code' : checker.code })) }}">{{ absolute_url(path('user.change_email_confirmation', {'checkerId' : checker.id, 'code' : checker.code })) }}</a><br />
+<br />
+Если вы не запрашивали изменение e-mail, просто проигнорируйте это письмо.
