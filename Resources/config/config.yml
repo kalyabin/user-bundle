@@ -1,0 +1,79 @@
+parameters:
+    authentication_listener: UserBundle\Listener\AuthenticationListener
+    validator.user_email_validator: UserBundle\Validator\Constraints\UserEmailValidator
+    user.mailer: UserBundle\Utils\UserSystemMailManager
+    user.manager: UserBundle\Utils\UserManager
+    user.provider: UserBundle\Security\UserProvider
+    user.simple_authenticator: UserBundle\Security\SimpleAuthenticator
+    user.registration_controller: UserBundle\Controller\RegistrationController
+    user.login_controller: UserBundle\Controller\LoginController
+    user.remember_password_controller: UserBundle\Controller\RememberPasswordController
+    user.dashboard_controller: UserBundle\Controller\DashboardController
+    user.default_from_email: 'mail@domain.ltd'
+
+services:
+    # прослушивать события системы безопасности (авторизация, ошибки входа)
+    authentication_listener:
+        class: '%authentication_listener%'
+        arguments: ['@translator', '@security.token_storage']
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onAccessDenied, priority: 1000 }
+
+    # Валидатор пользователей по e-mail
+    validator.user_email_validator:
+        class: '%validator.user_email_validator%'
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: validator.constraint_validator }
+
+    # Мейлер для системных уведомлений пользователю
+    user.mailer:
+        class: '%user.mailer%'
+        arguments: ['@mailer', '@templating', '%user.default_from_email%']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    # Менеджер пользователей
+    user.manager:
+        class: '%user.manager%'
+        arguments:
+            ['@security.encoder_factory', '@doctrine.orm.entity_manager', '@event_dispatcher']
+
+    # Провайдер пользователей (для авторизации)
+    user.provider:
+        class: '%user.provider%'
+        arguments:
+            ['@user.manager']
+
+    # Авторизатор пользователей по простому логин-паролю
+    user.simple_authenticator:
+        class: '%user.simple_authenticator%'
+        arguments:
+            ['@security.password_encoder']
+
+    # Контроллер регистрации
+    user.registration_controller:
+        class: '%user.registration_controller%'
+        arguments: ['@user.manager', '@user.mailer']
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+
+    # Контроллер авторизации
+    user.login_controller:
+        class: '%user.login_controller%'
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+
+    # Контроллер восстановления пароля
+    user.remember_password_controller:
+        class: '%user.remember_password_controller%'
+        arguments: ['@user.manager']
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+
+    # Контроллер панели пользователя
+    user.dashboard_controller:
+          class: '%user.dashboard_controller%'
+          arguments: ['@user.manager', '@security.csrf.token_manager', '%csrf_protection_token_intention%']
+          calls:
+              - [ setContainer, [ '@service_container' ] ]
