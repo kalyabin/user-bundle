@@ -10,6 +10,8 @@ parameters:
     user.remember_password_controller: UserBundle\Controller\RememberPasswordController
     user.dashboard_controller: UserBundle\Controller\DashboardController
     user.default_from_email: 'mail@domain.ltd'
+    user.registration_enabled: true
+    user.change_email_enabled: true
 
 services:
     # прослушивать события системы безопасности (авторизация, ошибки входа)
@@ -54,7 +56,7 @@ services:
     # Контроллер регистрации
     user.registration_controller:
         class: '%user.registration_controller%'
-        arguments: ['@user.manager', '@user.mailer']
+        arguments: ['@user.manager', '@user.mailer', '%user.registration_enabled%']
         calls:
             - [ setContainer, [ '@service_container' ] ]
 
@@ -74,6 +76,6 @@ services:
     # Контроллер панели пользователя
     user.dashboard_controller:
           class: '%user.dashboard_controller%'
-          arguments: ['@user.manager', '@security.csrf.token_manager', '%csrf_protection_token_intention%']
+          arguments: ['@user.manager', '@security.csrf.token_manager', '%csrf_protection_token_intention%', '%user.change_email_enabled%']
           calls:
               - [ setContainer, [ '@service_container' ] ]

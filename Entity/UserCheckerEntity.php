@@ -98,7 +98,7 @@ class UserCheckerEntity
      *
      * @return UserCheckerEntity
      */
-    public function setUser(\UserBundle\Entity\UserEntity $user)
+    public function setUser(\UserBundle\Entity\UserEntity $user): self
     {
         $this->user = $user;
 
@@ -110,7 +110,7 @@ class UserCheckerEntity
      *
      * @return \UserBundle\Entity\UserEntity
      */
-    public function getUser()
+    public function getUser(): UserEntity
     {
         return $this->user;
     }
@@ -132,7 +132,7 @@ class UserCheckerEntity
      *
      * @return UserCheckerEntity
      */
-    public function setCode($code)
+    public function setCode($code): self
     {
         $this->code = $code;
 
@@ -156,7 +156,7 @@ class UserCheckerEntity
      *
      * @return self
      */
-    public function setJsonData($data)
+    public function setJsonData($data): self
     {
         $encoder = new JsonEncoder();
         $this->setData($encoder->encode($data, JsonEncoder::FORMAT));
@@ -182,7 +182,7 @@ class UserCheckerEntity
      *
      * @return self
      */
-    public function setData($data)
+    public function setData($data): self
     {
         $this->data = $data;
         return $this;
@@ -205,7 +205,7 @@ class UserCheckerEntity
      *
      * @return UserCheckerEntity
      */
-    public function setAttempts($attempts)
+    public function setAttempts($attempts): self
     {
         $this->attempts = $attempts;
 
@@ -237,7 +237,7 @@ class UserCheckerEntity
      *
      * @return UserCheckerEntity
      */
-    public function setType($type)
+    public function setType($type): self
     {
         $this->type = $type;
 
@@ -259,7 +259,7 @@ class UserCheckerEntity
      *
      * @return array
      */
-    public static function getTypesList()
+    public static function getTypesList(): array
     {
         return [self::TYPE_ACTIVATION_CODE, self::TYPE_REMEMBER_PASSWORD];
     }
@@ -269,7 +269,7 @@ class UserCheckerEntity
      *
      * @return UserCheckerEntity
      */
-    public function generateCode()
+    public function generateCode(): self
     {
         $this->code = md5(uniqid() . time() . $this->getUser()->getEmail() . $this->getType());
 
@@ -281,7 +281,7 @@ class UserCheckerEntity
      *
      * @return bool
      */
-    public function isExpired()
+    public function isExpired(): bool
     {
         return $this->getAttempts() >= static::MAX_ATTEMPTS;
     }

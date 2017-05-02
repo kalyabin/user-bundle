@@ -48,17 +48,24 @@ class DashboardController extends Controller
     protected $restTokenIntention;
 
     /**
+     * @var bool Включено или отключено изменение e-mail
+     */
+    protected $changeEmailEnabled;
+
+    /**
      * Конструктор
      *
      * @param UserManager $userManager Менеджер пользователей
      * @param CsrfTokenManagerInterface $csrfManager Менеджер токенов CSRF
      * @param string $restTokenIntention Идентификатор токена для перегенерации при логауте
+     * @param bool $changeEmailEnabled Включена или отключено изменение e-mail
      */
-    public function __construct(UserManager $userManager, CsrfTokenManagerInterface $csrfManager, $restTokenIntention)
+    public function __construct(UserManager $userManager, CsrfTokenManagerInterface $csrfManager, $restTokenIntention, $changeEmailEnabled = true)
     {
         $this->userManager = $userManager;
         $this->csrfManager = $csrfManager;
         $this->restTokenIntention = $restTokenIntention;
+        $this->changeEmailEnabled = $changeEmailEnabled;
     }
 
     /**
@@ -116,6 +123,10 @@ class DashboardController extends Controller
      */
     public function confirmChangeEmailAction($checkerId, $code)
     {
+        if (!$this->changeEmailEnabled) {
+            throw $this->createAccessDeniedException();
+        }
+
         /** @var UserCheckerRepository $repository */
         $repository = $this->userManager->getEntityManager()->getRepository(UserCheckerEntity::class);
 
@@ -153,6 +164,10 @@ class DashboardController extends Controller
      */
     public function changeEmailAction(Request $request)
     {
+        if (!$this->changeEmailEnabled) {
+            throw $this->createAccessDeniedException();
+        }
+
         $success = false;
 
         /** @var UserEntity $user */

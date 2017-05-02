@@ -3,8 +3,11 @@
 namespace UserBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Encoder\JsonDecode;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Validator\Constraints as Assert;
 use UserBundle\Validator\Constraints\UserEmail;
 
@@ -100,11 +103,19 @@ class UserEntity implements UserInterface
     private $checker;
 
     /**
+     * @ORM\OneToMany(targetEntity="UserBundle\Entity\UserRoleEntity", mappedBy="user", cascade={"persist", "remove"})
+     *
+     * @var UserRoleEntity[] Привязка к ролям пользователя
+     */
+    private $role;
+
+    /**
      * Конструктор
      */
     public function __construct()
     {
         $this->checker = new ArrayCollection();
+        $this->role = new ArrayCollection();
     }
 
     /**
@@ -112,7 +123,7 @@ class UserEntity implements UserInterface
      *
      * @return integer[]
      */
-    public static function getStatusesList()
+    public static function getStatusesList(): array
     {
         return [self::STATUS_ACTIVE, self::STATUS_LOCKED, self::STATUS_NEED_ACTIVATION];
     }
@@ -134,7 +145,7 @@ class UserEntity implements UserInterface
      *
      * @return UserEntity
      */
-    public function setName($name)
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -158,7 +169,7 @@ class UserEntity implements UserInterface
      *
      * @return UserEntity
      */
-    public function setEmail($email)
+    public function setEmail($email): self
     {
         $this->email = $email;
 
@@ -182,7 +193,7 @@ class UserEntity implements UserInterface
      *
      * @return UserEntity
      */
-    public function setPassword($password)
+    public function setPassword($password): self
     {
         $this->password = $password;
 
@@ -204,7 +215,7 @@ class UserEntity implements UserInterface
      *
      * @return UserEntity
      */
-    public function generateSalt()
+    public function generateSalt(): self
     {
         if (empty($this->salt)) {
             $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -238,7 +249,7 @@ class UserEntity implements UserInterface
      *
      * @return UserEntity
      */
-    public function setSalt($salt)
+    public function setSalt($salt): self
     {
         $this->salt = $salt;
 
@@ -252,7 +263,7 @@ class UserEntity implements UserInterface
      *
      * @return UserEntity
      */
-    public function setStatus($status)
+    public function setStatus($status): self
     {
         $this->status = $status;
 
@@ -272,9 +283,9 @@ class UserEntity implements UserInterface
     /**
      * Get checker
      *
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getChecker()
+    public function getChecker(): Collection
     {
         return $this->checker;
     }
@@ -297,11 +308,17 @@ class UserEntity implements UserInterface
     /**
      * Роли пользователя
      *
-     * @return array
+     * @return string[]
      */
-    public function getRoles()
+    public function getRoles(): array
     {
-        return [];
+        $result = [];
+
+        foreach ($this->role as $roleEntity) {
+            $result[] = $roleEntity->getCode();
+        }
+
+        return $result;
     }
 
     /**
@@ -309,7 +326,7 @@ class UserEntity implements UserInterface
      *
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->status == self::STATUS_ACTIVE;
     }
@@ -319,7 +336,7 @@ class UserEntity implements UserInterface
      *
      * @return bool
      */
-    public function isNeedActivation()
+    public function isNeedActivation(): bool
     {
         return $this->status == self::STATUS_NEED_ACTIVATION;
     }
@@ -329,7 +346,7 @@ class UserEntity implements UserInterface
      *
      * @return bool
      */
-    public function isLocked()
+    public function isLocked(): bool
     {
         return $this->status == self::STATUS_LOCKED;
     }
@@ -341,7 +358,7 @@ class UserEntity implements UserInterface
      *
      * @return UserEntity
      */
-    public function addChecker(\UserBundle\Entity\UserCheckerEntity $checker)
+    public function addChecker(\UserBundle\Entity\UserCheckerEntity $checker): self
     {
         $this->checker[] = $checker;
 
@@ -387,5 +404,52 @@ class UserEntity implements UserInterface
                 $this->removeChecker($checker);
             }
         }
+    }
+
+    /**
+     * Очистка всех ролей
+     *
+     * @return UserEntity
+     */
+    public function clearRoles(): self
+    {
+        $this->role->clear();
+
+        return $this;
+    }
+
+    /**
+     * Add role
+     *
+     * @param \UserBundle\Entity\UserRoleEntity $role
+     *
+     * @return UserEntity
+     */
+    public function addRole(\UserBundle\Entity\UserRoleEntity $role): self
+    {
+        $role->setUser($this);
+        $this->role[] = $role;
+
+        return $this;
+    }
+
+    /**
+     * Remove role
+     *
+     * @param \UserBundle\Entity\UserRoleEntity $role
+     */
+    public function removeRole(\UserBundle\Entity\UserRoleEntity $role)
+    {
+        $this->role->removeElement($role);
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRole(): Collection
+    {
+        return $this->role;
     }
 }

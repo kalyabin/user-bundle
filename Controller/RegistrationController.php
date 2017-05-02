@@ -37,15 +37,22 @@ class RegistrationController extends Controller
     protected $mailManager;
 
     /**
+     * @var bool Флаг включения регистрации
+     */
+    protected $registrationEnabled;
+
+    /**
      * Конструктор
      *
      * @param UserManager $userManager Сервис для работы с пользователями
      * @param UserSystemMailManager $mailManager Сервис для отправки писем пользователям
+     * @param boolean $registrationEnabled Включена или отключена регистрация
      */
-    public function __construct(UserManager $userManager, UserSystemMailManager $mailManager)
+    public function __construct(UserManager $userManager, UserSystemMailManager $mailManager, $registrationEnabled = true)
     {
         $this->userManager = $userManager;
         $this->mailManager = $mailManager;
+        $this->registrationEnabled = $registrationEnabled;
     }
 
     /**
@@ -60,6 +67,10 @@ class RegistrationController extends Controller
      */
     public function resendActivationCodeAction($userId)
     {
+        if (!$this->registrationEnabled) {
+            throw $this->createAccessDeniedException();
+        }
+
         $result = [
             'success' => false,
         ];
@@ -108,6 +119,10 @@ class RegistrationController extends Controller
      */
     public function activationAction($checkerId, $code)
     {
+        if (!$this->registrationEnabled) {
+            throw $this->createAccessDeniedException();
+        }
+
         /** @var UserCheckerRepository $repository */
         $repository = $this->userManager->getEntityManager()->getRepository(UserCheckerEntity::class);
 
@@ -139,6 +154,10 @@ class RegistrationController extends Controller
      */
     public function registerAction(Request $request)
     {
+        if (!$this->registrationEnabled) {
+            throw $this->createAccessDeniedException();
+        }
+
         $user = new UserEntity();
 
         $form = $this->createForm(RegistrationType::class, $user);

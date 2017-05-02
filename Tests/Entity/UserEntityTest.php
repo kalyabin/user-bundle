@@ -36,6 +36,7 @@ class UserEntityTest extends WebTestCase
      * @covers UserEntity::setStatus()
      * @covers UserEntity::setSalt()
      * @covers UserEntity::generateSalt()
+     * @covers UserEntity::getRoles()
      *
      * @covers UserEntity::getEmail()
      * @covers UserEntity::getName()
@@ -58,6 +59,7 @@ class UserEntityTest extends WebTestCase
             ->setPassword($password)
             ->setStatus($status);
 
+        $this->assertEmpty($model->getRoles());
         $this->assertEquals($email, $model->getEmail());
         $this->assertEquals($name, $model->getName());
         $this->assertEquals($password, $model->getPassword());
